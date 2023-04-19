@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -35,11 +37,24 @@ func main() {
 		log.Fatalf("Error posting tweet: %v", err)
 	}
 
-	fmt.Println("Successfully posted tweet: tweetText", res.Status)
+	fmt.Println("Successfully posted tweet:", res.Status)
 }
 
 func postTweet(httpClient *http.Client, text string) (*http.Response, error) {
-	form := make(map[string][]string)
-	form["status"] = []string{text}
-	return httpClient.PostForm(tweetEndpoint, form)
+	data := map[string]string{
+		"status": text,
+	}
+	payload, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", tweetEndpoint, bytes.NewBuffer(payload))
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	return httpClient.Do(req)
 }
