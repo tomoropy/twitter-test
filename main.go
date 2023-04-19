@@ -1,32 +1,34 @@
 package main
 
 import (
-	"context"
 	"log"
+	"net/url"
 	"os"
 
-	"github.com/sivchari/gotwtr"
+	"github.com/ChimeraCoder/anaconda"
 )
 
 func main() {
-	bearerToken := os.Getenv("BEARER_TOKEN")
+	apiKey := os.Getenv("API_KEY")
+	apiSecretKey := os.Getenv("API_SECRET_KEY")
+	accessToken := os.Getenv("ACCESS_TOKEN")
+	accessTokenSecret := os.Getenv("ACCESS_TOKEN_SECRET")
 
-	client := gotwtr.New(bearerToken)
+	anaconda.SetConsumerKey(apiKey)
+	anaconda.SetConsumerSecret(apiSecretKey)
+	api := anaconda.NewTwitterApi(accessToken, accessTokenSecret)
 
-	tweetText := "Hello, world! This is my first tweet using gotwtr library."
-	tweet, err := postTweet(client, tweetText)
+	tweetText := "Hello, world! This is my first tweet using anaconda library."
+	tweet, err := postTweet(api, tweetText)
 	if err != nil {
 		log.Fatalf("Error posting tweet: %v", err)
 	}
 
-	log.Printf("Successfully posted tweet: %s (ID: %s)", tweet.PostTweetData.Text, tweet.PostTweetData.ID)
+	log.Printf("Successfully posted tweet: %s (ID: %s)", tweet.Text, tweet.IdStr)
 }
 
-func postTweet(client *gotwtr.Client, text string) (*gotwtr.PostTweetResponse, error) {
-	tweet, err := client.PostTweet(context.Background(), &gotwtr.PostTweetOption{Text: text})
-	if err != nil {
-		return nil, err
-	}
-
-	return tweet, nil
+func postTweet(api *anaconda.TwitterApi, text string) (anaconda.Tweet, error) {
+	v := url.Values{}
+	v.Set("status", text)
+	return api.PostTweet(text, v)
 }
