@@ -33,16 +33,15 @@ func main() {
 	tweetText := "テスト投稿"
 
 	res, err := postTweet(httpClient, tweetText)
-	if err != nil {
-		log.Fatalf("Error posting tweet: %v", err)
+	if res.StatusCode != http.StatusOK {
+		fmt.Println(res)
+		log.Fatal(err)
 	}
-
-	fmt.Println("Successfully posted tweet:", res.Status)
 }
 
 func postTweet(httpClient *http.Client, text string) (*http.Response, error) {
 	data := map[string]string{
-		"status": text,
+		"text": text,
 	}
 	payload, err := json.Marshal(data)
 	if err != nil {
