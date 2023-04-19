@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/dghubble/oauth1"
 	"github.com/dghubble/oauth1/twitter"
@@ -30,7 +31,7 @@ func main() {
 	token := oauth1.NewToken(accessToken, accessTokenSecret)
 	httpClient := config.Client(context.Background(), token)
 
-	tweetText := "テスト投稿"
+	tweetText := strings.Repeat("a", 280)
 
 	res, err := postTweet(httpClient, tweetText)
 	if err != nil || res.StatusCode != 201 {
