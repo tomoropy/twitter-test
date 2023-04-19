@@ -11,7 +11,7 @@ import (
 	"github.com/dghubble/oauth1/twitter"
 )
 
-const tweetEndpoint = "https://api.twitter.com/1.1/statuses/update.json"
+const tweetEndpoint = "https://api.twitter.com/2/tweets"
 
 func main() {
 	apiKey := os.Getenv("API_KEY")
