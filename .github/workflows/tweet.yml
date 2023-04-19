@@ -19,18 +19,15 @@ jobs:
 
       - name: Install dependencies
         run: |
-          go get github.com/dghubble/go-twitter/twitter
-          go get github.com/dghubble/oauth1
-
-      - name: test print
-        run: echo "test print"
+          go get github.com/sivchari/gotwtr
 
       - name: Build and run
         env:
-          API_KEY: ${{ secrets.API_KEY }}
-          API_SECRET_KEY: ${{ secrets.API_SECRET_KEY }}
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+          # API_KEY: ${{ secrets.API_KEY }}
+          # API_SECRET_KEY: ${{ secrets.API_SECRET_KEY }}
+          # ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          # ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+          BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
         run: |
           go build main.go
           ./main
