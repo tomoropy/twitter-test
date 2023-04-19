@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/dghubble/go-twitter/twitter"
-	"github.com/dghubble/oauth1"
 	"io/ioutil"
 	"log"
 	"os"
+
+	"github.com/dghubble/go-twitter/twitter"
+	"github.com/dghubble/oauth1"
 )
 
 func main() {
@@ -20,7 +21,7 @@ func main() {
 
 	client := twitter.NewClient(httpClient)
 
-	data, err := ioutil.ReadFile("merged.txt")
+	data, err := ioutil.ReadFile("merge.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
