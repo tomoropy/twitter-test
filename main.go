@@ -33,7 +33,7 @@ func main() {
 	tweetText := "テスト投稿"
 
 	res, err := postTweet(httpClient, tweetText)
-	if res.StatusCode != http.StatusOK {
+	if err != nil || res.StatusCode != 201 {
 		fmt.Println(res)
 		log.Fatal(err)
 	}
