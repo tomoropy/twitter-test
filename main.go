@@ -1,12 +1,17 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	"log"
-	"net/url"
+	"net/http"
 	"os"
 
-	"github.com/ChimeraCoder/anaconda"
+	"github.com/dghubble/oauth1"
+	"github.com/dghubble/oauth1/twitter"
 )
+
+const tweetEndpoint = "https://api.twitter.com/1.1/statuses/update.json"
 
 func main() {
 	apiKey := os.Getenv("API_KEY")
@@ -14,21 +19,26 @@ func main() {
 	accessToken := os.Getenv("ACCESS_TOKEN")
 	accessTokenSecret := os.Getenv("ACCESS_TOKEN_SECRET")
 
-	anaconda.SetConsumerKey(apiKey)
-	anaconda.SetConsumerSecret(apiSecretKey)
-	api := anaconda.NewTwitterApi(accessToken, accessTokenSecret)
+	config := oauth1.Config{
+		ConsumerKey:    apiKey,
+		ConsumerSecret: apiSecretKey,
+		Endpoint:       twitter.AuthorizeEndpoint,
+	}
 
-	tweetText := "Hello, world! This is my first tweet using anaconda library."
-	tweet, err := postTweet(api, tweetText)
-	if err != nil {
+	token := oauth1.NewToken(accessToken, accessTokenSecret)
+	httpClient := config.Client(context.Background(), token)
+
+	tweetText := "Hello, world! This is my first tweet using a custom Go Twitter client."
+
+	if _, err := postTweet(httpClient, tweetText); err != nil {
 		log.Fatalf("Error posting tweet: %v", err)
 	}
 
-	log.Printf("Successfully posted tweet: %s (ID: %s)", tweet.Text, tweet.IdStr)
+	fmt.Printf("Successfully posted tweet: %s\n", tweetText)
 }
 
-func postTweet(api *anaconda.TwitterApi, text string) (anaconda.Tweet, error) {
-	v := url.Values{}
-	v.Set("status", text)
-	return api.PostTweet(text, v)
+func postTweet(httpClient *http.Client, text string) (*http.Response, error) {
+	form := make(map[string][]string)
+	form["status"] = []string{text}
+	return httpClient.PostForm(tweetEndpoint, form)
 }
