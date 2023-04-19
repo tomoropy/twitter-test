@@ -25,12 +25,12 @@ jobs:
       - name: test print
         run: echo "test print"
 
-    # - name: Build and run
-    #   env:
-    #     API_KEY: ${{ secrets.API_KEY }}
-    #     API_SECRET_KEY: ${{ secrets.API_SECRET_KEY }}
-    #     ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-    #     ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
-    #   run: |
-    #     go build main.go
-    #     ./main
+      - name: Build and run
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          API_SECRET_KEY: ${{ secrets.API_SECRET_KEY }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+        run: |
+          go build main.go
+          ./main
