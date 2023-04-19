@@ -1,35 +1,32 @@
 package main
 
 import (
-	"io/ioutil"
+	"context"
 	"log"
 	"os"
 
-	"github.com/dghubble/go-twitter/twitter"
-	"github.com/dghubble/oauth1"
+	"github.com/sivchari/gotwtr"
 )
 
 func main() {
-	apiKey := os.Getenv("API_KEY")
-	apiSecretKey := os.Getenv("API_SECRET_KEY")
-	accessToken := os.Getenv("ACCESS_TOKEN")
-	accessTokenSecret := os.Getenv("ACCESS_TOKEN_SECRET")
+	bearerToken := os.Getenv("BEARER_TOKEN")
 
-	config := oauth1.NewConfig(apiKey, apiSecretKey)
-	token := oauth1.NewToken(accessToken, accessTokenSecret)
-	httpClient := config.Client(oauth1.NoContext, token)
+	client := gotwtr.New(bearerToken)
 
-	client := twitter.NewClient(httpClient)
-
-	data, err := ioutil.ReadFile("merge.txt")
+	tweetText := "Hello, world! This is my first tweet using gotwtr library."
+	tweet, err := postTweet(client, tweetText)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Error posting tweet: %v", err)
 	}
 
-	tweet, _, err := client.Statuses.Update(string(data), nil)
+	log.Printf("Successfully posted tweet: %s (ID: %s)", tweet.PostTweetData.Text, tweet.PostTweetData.ID)
+}
+
+func postTweet(client *gotwtr.Client, text string) (*gotwtr.PostTweetResponse, error) {
+	tweet, err := client.PostTweet(context.Background(), &gotwtr.PostTweetOption{Text: text})
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
-	log.Printf("Posted tweet: %s\n", tweet.Text)
+	return tweet, nil
 }
