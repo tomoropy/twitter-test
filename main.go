@@ -28,13 +28,14 @@ func main() {
 	token := oauth1.NewToken(accessToken, accessTokenSecret)
 	httpClient := config.Client(context.Background(), token)
 
-	tweetText := "Hello, world! This is my first tweet using a custom Go Twitter client."
+	tweetText := "テスト投稿"
 
-	if _, err := postTweet(httpClient, tweetText); err != nil {
+	res, err := postTweet(httpClient, tweetText)
+	if err != nil {
 		log.Fatalf("Error posting tweet: %v", err)
 	}
 
-	fmt.Printf("Successfully posted tweet: %s\n", tweetText)
+	fmt.Println("Successfully posted tweet: tweetText", res.Status)
 }
 
 func postTweet(httpClient *http.Client, text string) (*http.Response, error) {
