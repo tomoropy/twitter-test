@@ -23,7 +23,6 @@ jobs:
 
       - name: Get git diff
         run: |
-          git fetch origin main
           git diff HEAD^ HEAD > diff.json
 
       - name: Build and run
