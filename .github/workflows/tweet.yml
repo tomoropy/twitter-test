@@ -38,7 +38,7 @@ jobs:
           API_SECRET_KEY: ${{ secrets.API_SECRET_KEY }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
-          TWEET_TEXT: ${{ cat('diff.json') }}
         run: |
+          export TWEET_TEXT=$(cat diff.json)
           go build main.go
           ./main
