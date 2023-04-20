@@ -24,7 +24,7 @@ jobs:
       - name: Get git diff
         run: |
           git fetch origin main
-          git diff FETCH_HEAD^ --name-only > diff.json
+          git diff HEAD^ --name-only > diff.json
 
       - name: Build and run
         env:
