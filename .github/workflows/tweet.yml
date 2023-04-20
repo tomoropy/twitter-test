@@ -21,12 +21,24 @@ jobs:
         run: |
           go get github.com/sivchari/gotwtr
 
+      - name: Get git diff
+        run: |
+          git fetch origin main:main
+          git diff main > diff.txt
+
+      - name: Convert git diff to JSON
+        run: |
+          echo '{
+              "text": "'"$(cat diff.txt)"'"
+          }' > diff.json
+
       - name: Build and run
         env:
           API_KEY: ${{ secrets.API_KEY }}
           API_SECRET_KEY: ${{ secrets.API_SECRET_KEY }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+          TWEET_TEXT: ${{ cat('diff.json') }}
         run: |
           go build main.go
           ./main
