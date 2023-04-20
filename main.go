@@ -8,7 +8,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/dghubble/oauth1"
 	"github.com/dghubble/oauth1/twitter"
@@ -22,6 +21,8 @@ func main() {
 	accessToken := os.Getenv("ACCESS_TOKEN")
 	accessTokenSecret := os.Getenv("ACCESS_TOKEN_SECRET")
 
+	tweetText := os.Getenv("TWEET_TEXT")
+
 	config := oauth1.Config{
 		ConsumerKey:    apiKey,
 		ConsumerSecret: apiSecretKey,
@@ -31,13 +32,12 @@ func main() {
 	token := oauth1.NewToken(accessToken, accessTokenSecret)
 	httpClient := config.Client(context.Background(), token)
 
-	tweetText := strings.Repeat("a", 280)
-
 	res, err := postTweet(httpClient, tweetText)
 	if err != nil || res.StatusCode != 201 {
 		fmt.Println(res)
 		log.Fatal(err)
 	}
+	fmt.Println("Tweeted: ", tweetText)
 }
 
 func postTweet(httpClient *http.Client, text string) (*http.Response, error) {
