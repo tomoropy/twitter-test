@@ -24,13 +24,7 @@ jobs:
       - name: Get git diff
         run: |
           git fetch origin main
-          git diff origin/main^ origin/main > diff.txt
-
-      - name: Convert git diff to JSON
-        run: |
-          echo '{
-              "text": "'"$(cat diff.txt)"'"
-          }' > diff.json
+          git diff HEAD^ HEAD > diff.json
 
       - name: Build and run
         env:
