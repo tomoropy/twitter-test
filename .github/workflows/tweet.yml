@@ -24,8 +24,9 @@ jobs:
       - name: Get git diff
         run: |
           git fetch origin main
-          latest_commit=$(git rev-parse origin/main)
-          previous_commit=$(git rev-parse origin/main^)
+          git checkout origin/main
+          latest_commit=$(git rev-parse HEAD)
+          previous_commit=$(git rev-parse HEAD^)
           git diff $previous_commit $latest_commit > diff.txt
 
       - name: Build and run
