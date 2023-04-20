@@ -23,9 +23,8 @@ jobs:
 
       - name: Get git diff
         run: |
-          git switch main
-          git fetch origin main:main
-          git diff main > diff.txt
+          git fetch origin main
+          git diff FETCH_HEAD~1 FETCH_HEAD > diff.txt
 
       - name: Convert git diff to JSON
         run: |
