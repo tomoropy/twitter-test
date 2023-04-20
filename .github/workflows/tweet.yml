@@ -23,6 +23,7 @@ jobs:
 
       - name: Get git diff
         run: |
+          git switch main
           git fetch origin main:main
           git diff main > diff.txt
 
